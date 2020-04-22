@@ -1,12 +1,25 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import Emails, Imports, upload_mails, upload_useragents, upload_proxies
+from .views import (Emails, Imports,upload_mails, MailsTable,
+                    imtp, webdriver, removesecurity, SendingDomainsView,
+                    SpamDomainsView, SendingDomainsDelete,SpamDomainsDelete )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('', Emails.as_view(), name='index'),
-    path('imports',Imports.as_view(), name='imports'),
-    path('uploadmails',upload_mails, name='uploadmails'),
-    path('uploadproxies', upload_proxies, name='uploadproxies'),
-    path('uploaduseragents', upload_useragents, name='uploaduseragents'),
+    path('imports/', Imports.as_view(), name='imports'),
+    
+    path('uploadmails', upload_mails, name='uploadmails'),
+
+    path('imtp/<int:id>/', imtp, name='imtp'),
+    path('webdriver/<int:id>/', webdriver, name='webdriver'),
+    path('removesecurity/<int:id>/', removesecurity, name='removesecurity'),
+
+    path('mailstable/', MailsTable.as_view(), name='mailstable'),
+
+    path('sendingtable/', SendingDomainsView.as_view(), name='sendingtable'),
+    path('spamtable/', SpamDomainsView.as_view(), name='spamtable'),
+    path('deletesendingdomain/<int:pk>', SendingDomainsDelete.as_view(), name='deletesendingdomain'),
+    path('deletespamdomain/<int:pk>', SpamDomainsDelete.as_view(), name='deletespamdomain'),
 ]
