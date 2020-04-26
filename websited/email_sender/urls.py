@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import (Emails, Imports,upload_mails, MailsTable,
-                    imtp, removesecurity, SendingDomainsView,
+                    imtp,  SendingDomainsView,
                     SpamDomainsView, SendingDomainsDelete,SpamDomainsDelete, UsageLog, Batches)
 
 urlpatterns = [
@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('imtp/<int:id>/', imtp, name='imtp'),
     # path('webdriver/<int:id>/', webdriver, name='webdriver'),
-    path('removesecurity/<int:id>/', removesecurity, name='removesecurity'),
+    # path('removesecurity/<int:id>/', removesecurity, name='removesecurity'),
 
     path('mailstable/', MailsTable.as_view(), name='mailstable'),
     path('usagelog/', UsageLog, name='usagelog'),

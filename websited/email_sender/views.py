@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .models import User_Agents, Addresses, Proxies, SendingDomains, SpamDomains, UsageLog,MailsBatch
 from .forms import SendingDomainsForm, SpamDomainsForm
-from .tasks import sec_remove, mail_cheker
+from .tasks import  mail_cheker
 from datetime import datetime
 
 class UsageLog(ListView):
@@ -22,10 +22,6 @@ def imtp(request, id):
 
 
 
-def removesecurity(request, id):
-   adrs = Addresses.objects.get(pk=id)
-   sec_remove(adrs.Email ,adrs.Password, adrs.Secret)
-   return redirect('mailstable')
 
 class Emails(TemplateView):
     template_name = "email_sender/home.html"
