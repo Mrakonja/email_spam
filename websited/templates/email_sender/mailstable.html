@@ -2,6 +2,9 @@
 
 
 {% block content %}
+<header>
+    <h1>Mails Table </h1>
+</header>
 <div class="row">
         <div class="col-lg-12">
 
@@ -32,9 +35,7 @@
                 <td>{{ member.Password }}</td>
                 <td>{{ member.Secret }} </td>
                 <td>{{ member.Active }} </td>
-                <td> <a href='{% url "imtp" member.pk %}'> IMTP SCAN</a>  </td>
-                <td> <a href='{% url "webdriver" member.pk %}'> webdriver  SCAN</a>  </td>
-                 <td> <a href='{% url "removesecurity" member.pk %}'> REMOVE SECURITY</a>  </td>
+                <td>{{ member.MailsBatch.pk }} </td>
             </tr>
             {% endfor %}
         </table>

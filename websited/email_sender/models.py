@@ -10,12 +10,18 @@ ACTIVE_CHOICES = [
 #       ProxyIP = models.CharField(max_length=255)
 #
 
+class MailsBatch(models.Model):
+      Date = models.DateTimeField(auto_now=True)
+      Name = models.CharField(unique=True, max_length=255)
+      Active = models.CharField(max_length=1, choices=ACTIVE_CHOICES, blank=True)
+
 class Addresses(models.Model):
       Email = models.EmailField()
       Password = models.CharField(max_length=255)
       Secret = models.CharField(max_length=255)
       Active =  models.CharField(max_length=1, choices=ACTIVE_CHOICES)
-#
+      MailsBatch = models.ForeignKey(MailsBatch, on_delete=models.CASCADE)
+
 class Proxies(models.Model):
        Domain = models.CharField(max_length=255)
        Active =  models.CharField(max_length=1, choices=ACTIVE_CHOICES)
@@ -27,11 +33,7 @@ class SendingDomains(models.Model):
 class SpamDomains(models.Model):
       Domain = models.CharField(max_length=255)
       Active =  models.CharField(max_length=1, choices=ACTIVE_CHOICES)
-#
-# class Responses(models.Model):
-#       Response = models.CharField(max_length=255)
-#       Active =  models.CharField(max_length=1, choices=ACTIVE_CHOICES)
-#
+
 class User_Agents(models.Model):
       User_Agent = models.CharField(max_length=255)
       Software = models.CharField(max_length=255)
@@ -46,3 +48,5 @@ class UsageLog(models.Model):
       Number_Retreived_from_Spam = models.IntegerField()
       Number_Spam = models.IntegerField()
       timestamp = models.DateTimeField(auto_now=True)
+
+

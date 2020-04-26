@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+
+<header>
+    <h1>Mail Batches </h1>
+</header>
+<div class="row">
+    <div class="col-lg-12">
+        <table>
+         {% for member in object_list %}
+            <tr>
+                <td>{{ member.Pk }} </td>
+                <td>{{ member.Date }} </td>
+                 <td>{{ member.Name }} </td>
+                 <td><a href="/batches/{{ member.id }}/"><i class="fas fa-fw fa-cog"></i></a> </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+{% endblock content %}

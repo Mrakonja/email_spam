@@ -10,53 +10,53 @@ import os
 from .models import SendingDomains, SpamDomains
 
 @shared_task
-def mail_cheker(email, password):
-    print('maulchecker started')
-    email_type = email.split('@')[-1]
+def mail_cheker(array):
+    if len(array):
+        for i in array:
+            email = i.Email
+            password = i.Password
+            print('maulchecker started')
+            email_type = email.split('@')[-1]
 
-    if email_type == 'gmail.com':
-             imapa = 'imap.gmail.com'
-             spam  = '[Gmail]/Spam'
-             inbox = 'INBOX'
-    else:
-            imapa = 'imap.yahoo.com'
-            spam = 'Spam'
+            if email_type == 'gmail.com':
+                     imapa = 'imap.gmail.com'
+                     spam  = '[Gmail]/Spam'
+                     inbox = 'INBOX'
+            else:
+                    imapa = 'imap.yahoo.com'
+                    spam = 'Spam'
 
-    comn = imaplib.IMAP4_SSL(imapa, 993)
-    comn.login(email, password)
-    print(comn.list())
-    comn.select(spam)
+            comn = imaplib.IMAP4_SSL(imapa, 993)
+            comn.login(email, password)
+            comn.select(spam)
 
-    typ, data = comn.search(None, 'ALL')
-    all_data = data[0].split()
-    sending_list = SendingDomains.objects.all()
-    spam_list = SpamDomains.objects.all()
-    for data in all_data:
-        t, em = comn.fetch(data, '(RFC822)')
-        raw = e_mail.message_from_bytes(em[0][1])
-        print(raw['from'])
-        for i in sending_list:
-            if i.Domain in  raw['From']:
-                print('true')
+            typ, data = comn.search(None, 'ALL')
+            all_data = data[0].split()
+            sending_list = SendingDomains.objects.all()
+            spam_list = SpamDomains.objects.all()
+            for data in all_data:
+                t, em = comn.fetch(data, '(RFC822)')
+                raw = e_mail.message_from_bytes(em[0][1])
+                 for i in sending_list:
+                    if i.Domain in  raw['From']:
+                        print('true')
+                spamm_count = 0
+                for i in  spam_list:
+                    if i.Domain in  raw['From']:
+                        spamm_count +=1
 
-        for i in  spam_list:
-            if i.Domain in  raw['From']:
-                print('true')
-
-    comn.select(inbox)
-    typ, data = comn.search(None, 'ALL')
-    all_data = data[0].split()
-    for data in all_data:
-        t, em = comn.fetch(data, '(RFC822)')
-        raw = e_mail.message_from_bytes(em[0][1])
-        print(raw['from'])
-        for i in sending_list:
-            if i.Domain in  raw['From']:
-                print('true')
-
-        for i in  spam_list:
-            if i.Domain in  raw['From']:
-                print('true')
+            comn.select(inbox)
+            typ, data = comn.search(None, 'ALL')
+            all_data = data[0].split()
+            for data in all_data:
+                t, em = comn.fetch(data, '(RFC822)')
+                raw = e_mail.message_from_bytes(em[0][1])
+                inbox_count = 0
+                for i in sending_list:
+                    if i.Domain in  raw['From']:
+                        inbox_count += 1
+                for i in  spam_list:
+                    if i.Domain in  raw['From']:
 
 
 #Selenium

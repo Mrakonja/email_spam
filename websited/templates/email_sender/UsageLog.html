@@ -1,0 +1,25 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+
+<header>
+    <h1> USAGE LOG  </h1>
+</header>
+<div class="row">
+    <div class="col-lg-12">
+        <table>
+         {% for member in object_list %}
+            <tr>
+                <td>{{ member.EmailAddresses_ID }} </td>
+                <td>{{ member.Number_Opened }} </td>
+                <td>{{ member.Number_Clicked }} </td>
+                <td>{{ member.Number_Retreived_from_Spam }} </td>
+                <td>{{ member.Number_Spam }} </td>
+                <td>{{ member.timestamp }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+{% endblock content %}

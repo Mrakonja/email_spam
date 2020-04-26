@@ -2,18 +2,25 @@ from django.views.generic import TemplateView, ListView, View, FormView, DeleteV
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from .models import User_Agents, Addresses, Proxies, SendingDomains, SpamDomains
+from .models import User_Agents, Addresses, Proxies, SendingDomains, SpamDomains, UsageLog,MailsBatch
 from .forms import SendingDomainsForm, SpamDomainsForm
 from .tasks import sec_remove, mail_cheker
+from datetime import datetime
+
+class UsageLog(ListView):
+   template_name = 'email_sender/UsageLog.html'
+   model = UsageLog
+
+class Batches(ListView):
+   template_name = 'email_sender/Batches.html'
+   model = MailsBatch
 
 def imtp(request, id):
-   adrs = Addresses.objects.get(pk=id)
-   mail_cheker(adrs.Email, adrs.Password)
+   query = Addresses.objects.filter(MailsBatch_id=id)
+   mail_cheker(query)
    return redirect('mailstable')
 
-def webdriver(request, id):
-   adrs = Addresses.objects.get(pk=id)
-   return redirect('mailstable')
+
 
 def removesecurity(request, id):
    adrs = Addresses.objects.get(pk=id)
@@ -57,8 +64,6 @@ class SendingDomainsView(ListView):
 
       return render(request, self.template_name, {'form': form})
 
-
-
 class Imports(TemplateView):
    template_name = "email_sender/import.html"
    
@@ -73,7 +78,6 @@ class ProxiesTable(ListView):
 class UseragentsTable(ListView):
    template_name = "email_sender/uatables.html"
    model = User_Agents
- 
 
 def upload_mails(request):
    if "GET" == request.method:
@@ -92,20 +96,23 @@ def upload_mails(request):
       
       file_data = csv_file.read().decode("utf-8")
       lines = file_data.split("\n")
-
+      d =  datetime.now()
+      new_batch = MailsBatch(Date=d, Name="batch"+ d.strftime('%Y-%m-%d-%H%M%S'))
+      new_batch.save()
       for line in lines:
          try:
             fields = line.split(",")
             result = Addresses(Email = fields[0],
-                                       Password = fields[1],
-                                       Secret = fields[2],
-                                       Active =  'N',
-                                      )
+                                Password = fields[1],
+                                Secret = fields[2],
+                                Active =  'N',
+                                MailsBatch = new_batch
+                                )
             result.save()
 
 
-         except:
-             pass
+         except Exception as e:
+             print(e)
 
    
 
@@ -117,8 +124,6 @@ def upload_mails(request):
    
    return HttpResponseRedirect("imports")
 
-
-
 class SendingDomainsDelete(DeleteView):
    model= SendingDomains
    success_url = reverse_lazy('sendingtable')
@@ -126,3 +131,7 @@ class SendingDomainsDelete(DeleteView):
 class SpamDomainsDelete(DeleteView):
    model = SpamDomains
    success_url = reverse_lazy('spamtable')
+
+def  UsageLog(request):
+   template_name = 'email_sender/UsageLog.html'
+
