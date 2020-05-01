@@ -9,6 +9,15 @@
 <div class="row">
     <div class="col-lg-12">
         <table>
+            <thead>
+                <tr>
+                  <th>id</th>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>SCAN</th>
+
+                </tr>
+              </thead>
          {% for member in object_list %}
             <tr>
                 <td>{{ member.Pk }} </td>

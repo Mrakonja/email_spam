@@ -19,6 +19,7 @@ class Addresses(models.Model):
       Email = models.EmailField()
       Password = models.CharField(max_length=255)
       Secret = models.CharField(max_length=255)
+      Domain = models.CharField(max_length=255, blank=True)
       Active =  models.CharField(max_length=1, choices=ACTIVE_CHOICES)
       MailsBatch = models.ForeignKey(MailsBatch, on_delete=models.CASCADE)
 
